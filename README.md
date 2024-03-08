@@ -6,12 +6,12 @@ Each folder under `collections` is a collection of challenges, organized in thei
 
 For example `collections/testCollection/testChallenge/` is the path to a challenge named `testChallenge` which is inside a collection named `testCollection`.
 
-To practice challenge solving, move into one of the challenge folders, read the `CHALLENGE.md` and start working there.
+To understand the challenge and code a solution, move into one of the challenge folders, there you should read `RULES.md` and `CHALLENGE.md` before start working there in your favorite editor or IDE. It's recommended to open that challenge folder as the root of your IDE project/folder.
 
-When you finish, move to another challenge folder and work there to solve that other challenge.
+When your done, move to another challenge folder and work from there to solve that other challenge.
 
-The `acpp` tool is used to build and test your program. Read the usage guide in file `ACPP.MD`.
+The `acpp` tool is used to build and test your program. Read the usage guide section inside `RULES.md`.
 
-Read `RULES.md` to understand the limits and general rules and conventions when coding solutions.
+Also, in `RULES.md` there is must-read information required to understand the limitatios, general rules and conventions when coding and testing solutions.
 
-Follow instructions in `INSTALL.md` to install the `acpp` tool and start working on challenges.
+Follow the instructions on `INSTALL.md` to install the `acpp` tool, before start working on any challenge.
