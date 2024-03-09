@@ -1,0 +1,98 @@
+  name: Release
+
+  on:
+      push:        
+        tags:
+          - 'v[0-9]+.[0-9]+'      
+    
+  jobs:
+      build-and-release:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Determine release version from tag
+            id: version
+            run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+    
+          - name: Create Draft Release
+            id: create_release
+            if: steps.version.outcome == 'success'
+            uses: actions/create-release@v1
+            with:
+              tag_name: ${{ env.RELEASE_VERSION }}
+              release_name: Release ${{ env.RELEASE_VERSION }}
+              body: "Generated release for version ${{ env.RELEASE_VERSION }}"
+              draft: true
+              prerelease: false
+            env:
+              GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
+    
+          - name: Download assets from private acpp repository release
+            if: steps.create_release.outcome == 'success'
+            env:
+              ACCESS_TOKEN: ${{ secrets.GH_SECRET }}
+            run: |              
+              for asset_name in "acpp.linux.amd64.bin" "acpp.darwin.amd64.bin" "acpp.windows.amd64.exe"
+              do
+                ASSET_URL=$(curl -s \
+                  -H "Authorization: token $GH_SECRET" \
+                  -H "Accept: application/vnd.github.v3+json" \
+                  "https://api.github.com/neuroactivos/acpp/releases/latest" | jq -r '.assets[] | select(.name == "$asset_name").url')
+
+                # Download the asset
+                curl -L -o "$asset_name" \
+                  -H "Accept: application/octet-stream" \
+                  -H "Authorization: token $ACCESS_TOKEN" \
+                  "$ASSET_URL"
+              done
+
+          - name: Upload linux asset to release
+            uses: actions/upload-release-asset@v1
+            if: steps.create_release.outcome == 'success'
+            with:
+              upload_url: ${{ steps.create_release.outputs.upload_url }}
+              asset_path: acpp-project/target/acpp.linux.amd64.bin
+              asset_name: acpp.linux.amd64.bin
+              asset_content_type: application/octet-stream              
+            env:
+              GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
+
+          - name: Upload macos asset to release
+            uses: actions/upload-release-asset@v1
+            if: steps.create_release.outcome == 'success'
+            with:
+              upload_url: ${{ steps.create_release.outputs.upload_url }}
+              asset_path: acpp-project/target/acpp.darwin.amd64.bin
+              asset_name: acpp.darwin.amd64.bin
+              asset_content_type: application/octet-stream              
+            env:
+              GITHUB_TOKEN: ${{ secrets.GH_SECRET }}              
+
+          - name: Upload windows asset to release
+            uses: actions/upload-release-asset@v1
+            if: steps.create_release.outcome == 'success'
+            with:
+              upload_url: ${{ steps.create_release.outputs.upload_url }}
+              asset_path: acpp-project/target/acpp.windows.amd64.exe
+              asset_name: acpp.windows.amd64.exe
+              asset_content_type: application/octet-stream              
+            env:
+              GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
+    
+          - name: Mark Release as Non-Draft
+            if: steps.create_release.outcome == 'success' && success()
+            run: |
+              curl \
+                -X PATCH \
+                -H "Authorization: token ${{ secrets.GH_SECRET }}" \
+                -H "Accept: application/vnd.github.v3+json" \
+                -d '{"draft": false}' \
+                "https://api.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.id }}"
+            env:
+              GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
+    
+          - name: Delete Draft Release if Upload Fails
+            if: steps.create_release.outcome == 'success' && failure()
+            run: |
+              curl -X DELETE \
+                --header "Authorization: Bearer ${{ secrets.GH_SECRET }}" \
+                "https://api.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.id }}"
