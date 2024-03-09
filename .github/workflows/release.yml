@@ -25,26 +25,27 @@
               prerelease: false
             env:
               GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
-    
-          - name: Download assets from private acpp repository release
+
+          - name: Download assets from private repository release by tag
             if: steps.create_release.outcome == 'success'
             env:
               ACCESS_TOKEN: ${{ secrets.GH_SECRET }}
-            run: |              
+              RELEASE_TAG: ${{ env.RELEASE_VERSION }}
+            run: |
               for asset_name in "acpp.linux.amd64.bin" "acpp.darwin.amd64.bin" "acpp.windows.amd64.exe"
               do
                 ASSET_URL=$(curl -s \
-                  -H "Authorization: token $GH_SECRET" \
+                  -H "Authorization: token $ACCESS_TOKEN" \
                   -H "Accept: application/vnd.github.v3+json" \
-                  "https://api.github.com/neuroactivos/acpp/releases/latest" | jq -r '.assets[] | select(.name == "$asset_name").url')
-
+                  "https://api.github.com/repos/neuroactivos/acpp/releases/tags/$RELEASE_TAG" | jq -r --arg asset_name "$asset_name" '.assets[] | select(.name == $asset_name).url')
+          
                 # Download the asset
                 curl -L -o "$asset_name" \
                   -H "Accept: application/octet-stream" \
                   -H "Authorization: token $ACCESS_TOKEN" \
                   "$ASSET_URL"
-              done
-
+              done              
+    
           - name: Upload linux asset to release
             uses: actions/upload-release-asset@v1
             if: steps.create_release.outcome == 'success'
