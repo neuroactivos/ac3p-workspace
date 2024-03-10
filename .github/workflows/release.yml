@@ -1,103 +1,98 @@
-  name: Release
+name: Release
 
-  on:
-    workflow_dispatch:
-      inputs:
-        acpp_tag:
-          description: 'The acpp tag of the release with the assets to include'
-          required: true
-        acpp_workspace_tag:
-            description: 'The acpp-workspace release tag to set'
-            required: true
+on:
+  workflow_dispatch:
+    inputs:
+      acpp_tag:
+        description: 'The acpp tag of the release with the assets to include'
+        required: true
+      acpp_workspace_tag:
+        description: 'The acpp-workspace release tag to set'
+        required: true
 
-  jobs:
-      build-and-release:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Determine release version from tag
-            id: version
-            run: echo "RELEASE_VERSION=${{ github.event.inputs.acpp_workspace_tag }}" >> $GITHUB_ENV
-    
-          - name: Create Draft Release
-            id: create_release
-            if: steps.version.outcome == 'success'
-            uses: actions/create-release@v1
-            with:
-              tag_name: ${{ env.RELEASE_VERSION }}
-              release_name: Release ${{ env.RELEASE_VERSION }}
-              body: "Generated release for version ${{ env.RELEASE_VERSION }}"
-              draft: true
-              prerelease: false
-            env:
-              GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:      
+      - name: Create Draft Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.acpp_workspace_tag }}
+          release_name: Release ${{ github.event.inputs.acpp_workspace_tag }}
+          body: "Generated release using tag ${{ github.event.inputs.acpp_workspace_tag }}"
+          draft: true
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
 
-          - name: Download assets from private acpp repository release by tag
-            if: steps.create_release.outcome == 'success'
-            env:
-              ACCESS_TOKEN: ${{ secrets.GH_SECRET }}
-              RELEASE_TAG: ${{ github.event.inputs.acpp_tag }}
-            run: |
-              for asset_name in "acpp.linux.amd64.bin" "acpp.darwin.amd64.bin" "acpp.windows.amd64.exe"
-              do
-                ASSET_URL=$(curl -s \
-                  -H "Authorization: token $ACCESS_TOKEN" \
-                  -H "Accept: application/vnd.github.v3+json" \
-                  "https://api.github.com/repos/neuroactivos/acpp/releases/tags/$RELEASE_TAG" | jq -r --arg asset_name "$asset_name" '.assets[] | select(.name == "$asset_name").url')
-          
-                curl -L -o "$asset_name" \
-                  -H "Accept: application/octet-stream" \
-                  -H "Authorization: token $ACCESS_TOKEN" \
-                  "$ASSET_URL"
-              done              
-    
-          - name: Upload linux asset to release
-            uses: actions/upload-release-asset@v1
-            if: steps.create_release.outcome == 'success'
-            with:
-              upload_url: ${{ steps.create_release.outputs.upload_url }}
-              asset_path: acpp-project/target/acpp.linux.amd64.bin
-              asset_name: acpp.linux.amd64.bin
-              asset_content_type: application/octet-stream              
-            env:
-              GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
+      - name: Download assets from private acpp repository release by tag
+        if: steps.create_release.outcome == 'success'
+        env:
+          ACCESS_TOKEN: ${{ secrets.GH_SECRET }}
+          RELEASE_TAG: ${{ github.event.inputs.acpp_tag }}
+        run: |
+          for asset_name in "acpp.linux.amd64.bin" "acpp.darwin.amd64.bin" "acpp.windows.amd64.exe"
+          do
+            ASSET_URL=$(curl -s \
+              -H "Authorization: token $ACCESS_TOKEN" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/neuroactivos/acpp/releases/tags/$RELEASE_TAG" | jq -r --arg asset_name "$asset_name" '.assets[] | select(.name == "$asset_name").url')
+      
+            curl -L -o "$asset_name" \
+              -H "Accept: application/octet-stream" \
+              -H "Authorization: token $ACCESS_TOKEN" \
+              "$ASSET_URL"
+          done              
 
-          - name: Upload macos asset to release
-            uses: actions/upload-release-asset@v1
-            if: steps.create_release.outcome == 'success'
-            with:
-              upload_url: ${{ steps.create_release.outputs.upload_url }}
-              asset_path: acpp-project/target/acpp.darwin.amd64.bin
-              asset_name: acpp.darwin.amd64.bin
-              asset_content_type: application/octet-stream              
-            env:
-              GITHUB_TOKEN: ${{ secrets.GH_SECRET }}              
+      - name: Upload linux asset to release
+        uses: actions/upload-release-asset@v1
+        if: steps.create_release.outcome == 'success'
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: acpp-project/target/acpp.linux.amd64.bin
+          asset_name: acpp.linux.amd64.bin
+          asset_content_type: application/octet-stream              
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
 
-          - name: Upload windows asset to release
-            uses: actions/upload-release-asset@v1
-            if: steps.create_release.outcome == 'success'
-            with:
-              upload_url: ${{ steps.create_release.outputs.upload_url }}
-              asset_path: acpp-project/target/acpp.windows.amd64.exe
-              asset_name: acpp.windows.amd64.exe
-              asset_content_type: application/octet-stream              
-            env:
-              GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
-    
-          - name: Mark Release as Non-Draft
-            if: steps.create_release.outcome == 'success' && success()
-            run: |
-              curl \
-                -X PATCH \
-                -H "Authorization: token ${{ secrets.GH_SECRET }}" \
-                -H "Accept: application/vnd.github.v3+json" \
-                -d '{"draft": false}' \
-                "https://api.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.id }}"
-            env:
-              GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
-    
-          - name: Delete Draft Release if Upload Fails
-            if: steps.create_release.outcome == 'success' && failure()
-            run: |
-              curl -X DELETE \
-                --header "Authorization: Bearer ${{ secrets.GH_SECRET }}" \
-                "https://api.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.id }}"
+      - name: Upload macos asset to release
+        uses: actions/upload-release-asset@v1
+        if: steps.create_release.outcome == 'success'
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: acpp-project/target/acpp.darwin.amd64.bin
+          asset_name: acpp.darwin.amd64.bin
+          asset_content_type: application/octet-stream              
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_SECRET }}              
+
+      - name: Upload windows asset to release
+        uses: actions/upload-release-asset@v1
+        if: steps.create_release.outcome == 'success'
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: acpp-project/target/acpp.windows.amd64.exe
+          asset_name: acpp.windows.amd64.exe
+          asset_content_type: application/octet-stream              
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
+
+      - name: Mark Release as Non-Draft
+        if: steps.create_release.outcome == 'success' && success()
+        run: |
+          curl \
+            -X PATCH \
+            -H "Authorization: token ${{ secrets.GH_SECRET }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d '{"draft": false}' \
+            "https://api.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.id }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
+
+      - name: Delete Draft Release if Upload Fails
+        if: steps.create_release.outcome == 'success' && failure()
+        run: |
+          curl -X DELETE \
+            --header "Authorization: Bearer ${{ secrets.GH_SECRET }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.id }}"
