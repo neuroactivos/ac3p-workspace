@@ -80,6 +80,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
 
+      - name: Upload windows installer asset to release
+        uses: actions/upload-release-asset@v1
+        if: steps.create_release.outcome == 'success'
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: acpp.windows.installer.x86_64.exe
+          asset_name: acpp.windows.installer.x86_64.exe
+          asset_content_type: application/octet-stream              
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_SECRET }}          
+
       - name: Mark Release as Non-Draft
         if: steps.create_release.outcome == 'success' && success()
         run: |
