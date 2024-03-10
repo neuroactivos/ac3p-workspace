@@ -35,12 +35,7 @@ jobs:
           for asset_name in "acpp.linux.amd64.bin" "acpp.darwin.amd64.bin" "acpp.windows.amd64.exe"
           do
             echo "Downloading $asset_name from release $RELEASE_TAG"
-
-            curl -s \
-              -H "Authorization: token $ACCESS_TOKEN" \
-              -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/neuroactivos/acpp/releases/tags/$RELEASE_TAG" | jq -r --arg asset_name "$asset_name" '.assets[] | select(.name == $asset_name).url'
-
+            
             ASSET_URL=$(curl -s \
               -H "Authorization: token $ACCESS_TOKEN" \
               -H "Accept: application/vnd.github.v3+json" \
@@ -57,7 +52,7 @@ jobs:
         if: steps.create_release.outcome == 'success'
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: acpp-project/target/acpp.linux.amd64.bin
+          asset_path: acpp.linux.amd64.bin
           asset_name: acpp.linux.amd64.bin
           asset_content_type: application/octet-stream              
         env:
@@ -68,7 +63,7 @@ jobs:
         if: steps.create_release.outcome == 'success'
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: acpp-project/target/acpp.darwin.amd64.bin
+          asset_path: acpp.darwin.amd64.bin
           asset_name: acpp.darwin.amd64.bin
           asset_content_type: application/octet-stream              
         env:
@@ -79,7 +74,7 @@ jobs:
         if: steps.create_release.outcome == 'success'
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: acpp-project/target/acpp.windows.amd64.exe
+          asset_path: acpp.windows.amd64.exe
           asset_name: acpp.windows.amd64.exe
           asset_content_type: application/octet-stream              
         env:
