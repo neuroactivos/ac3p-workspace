@@ -16,7 +16,7 @@
         steps:
           - name: Determine release version from tag
             id: version
-            run: echo "RELEASE_VERSION=${{ github.event.inputs.acpp_workspace_tag }}"" >> $GITHUB_ENV
+            run: echo "RELEASE_VERSION=${{ github.event.inputs.acpp_workspace_tag }}" >> $GITHUB_ENV
     
           - name: Create Draft Release
             id: create_release
