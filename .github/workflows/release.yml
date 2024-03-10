@@ -37,7 +37,7 @@ jobs:
             ASSET_URL=$(curl -s \
               -H "Authorization: token $ACCESS_TOKEN" \
               -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/neuroactivos/acpp/releases/tags/$RELEASE_TAG" | jq -r --arg asset_name "$asset_name" '.assets[] | select(.name == "$asset_name").url')
+              "https://api.github.com/repos/neuroactivos/acpp/releases/tags/$RELEASE_TAG" | jq -r --arg asset_name "$asset_name" '.assets[] | select(.name == $asset_name).url')
       
             curl -L -o "$asset_name" \
               -H "Accept: application/octet-stream" \
