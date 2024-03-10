@@ -32,7 +32,7 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.GH_SECRET }}
           RELEASE_TAG: ${{ github.event.inputs.acpp_tag }}
         run: |
-          for asset_name in "acpp.linux.x86_64.bin" "acpp.darwin.x86_64.bin" "acpp.windows.x86_64.exe"
+          for asset_name in "acpp.linux.x86_64.bin" "acpp.darwin.x86_64.bin" "acpp.windows.x86_64.exe" "acpp.windows.installer.x86_64.exe"
           do
             echo "Downloading $asset_name from release $RELEASE_TAG"
             
