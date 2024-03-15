@@ -32,7 +32,7 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.GH_SECRET }}
           RELEASE_TAG: ${{ github.event.inputs.acpp_tag }}
         run: |
-          for asset_name in "acpp.linux.x86_64.bin" "acpp.darwin.x86_64.bin" "acpp.windows.x86_64.exe" "acpp.windows.installer.x86_64.exe"
+          for asset_name in "acpp.linux.x86_64.bin" "acpp.darwin.x86_64.bin" "acpp.windows.x86_64.exe" "acpp.windows.installer.x86_64.exe" "acpp.vsix"
           do
             echo "Downloading $asset_name from release $RELEASE_TAG"
             
@@ -87,6 +87,17 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: acpp.windows.installer.x86_64.exe
           asset_name: acpp.windows.installer.x86_64.exe
+          asset_content_type: application/octet-stream              
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_SECRET }}          
+
+      - name: Upload VS Code Extension asset to release
+        uses: actions/upload-release-asset@v1
+        if: steps.create_release.outcome == 'success'
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: acpp.vsix
+          asset_name: acpp.vsix
           asset_content_type: application/octet-stream              
         env:
           GITHUB_TOKEN: ${{ secrets.GH_SECRET }}          
