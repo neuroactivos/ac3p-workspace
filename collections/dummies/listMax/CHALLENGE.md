@@ -1,28 +1,30 @@
 
-# Challenge: List Maximum #
+# Desafío: Máximo de una Lista #
 
-## Objective ##
+## Objetivo ##
 
-Write a program that reads a list of integers and outputs the largest integer in the list.
+Escribe un programa que lea una lista de enteros y muestre el mayor entero de la lista.
 
-### Input Format ###
+### Formato de Entrada ###
 
-The first line of input contains a single integer, `N`, representing the number of integers in the list, where `1 ≤ N ≤ 10^5`.
+La primera línea de entrada contiene un solo entero, `N`, que representa el número de enteros en la lista
 
-Each of the next `N` lines contains a single integer. These integers make up the list that the program will process.
+Cada una de las siguientes `N` líneas contiene un solo entero. Estos enteros conforman la lista que el programa procesará.
 
-### Output Format ###
 
-The program should output a single integer, representing the largest integer found in the list.
+### Formato de Salida ###
 
-### Constraints ###
+El programa debe mostrar un solo entero, que representa el mayor entero encontrado en la lista.
 
-- The integers in the list can be negative, positive, or zero.
-- Each integer in the list will fit within the standard 32-bit signed integer range.
+### Restricciones ###
 
-## Example 1 ##
+- El entero `N` cumple que `1 ≤ N ≤ 10^5`.
+- Los enteros de la lista pueden ser negativos, positivos o cero.
+- Para cada entero `n` de la lista se cumple que `-10^6 ≤ n ≤ 10^6`
 
-### Input ###
+## Ejemplo 1 ##
+
+### Entrada ###
 
 ```
 5
@@ -33,19 +35,19 @@ The program should output a single integer, representing the largest integer fou
 4
 ```
 
-### Output ###
+### Salida ###
 
 ```
 7
 ```
 
-__Explanation__
+__Explicación__
 
-The largest integer in the list `[1, -2, 3, 7, 4]` is 7, which is outputted by the program.
+El mayor entero en la lista `[1, -2, 3, 7, 4]` es 7, que es lo que muestra el programa.
 
-## Example 2 ##
+## Ejemplo 2 ##
 
-### Input ###
+### Entrada ###
 
 ```
 3
@@ -54,14 +56,14 @@ The largest integer in the list `[1, -2, 3, 7, 4]` is 7, which is outputted by t
 -2
 ```
 
-### Output ###
+### Salida ###
 
 ```
 -1
 ```
 
-__Explanation__
+__Explicación__
 
-The largest integer in the list `[-1, -3, -2]` is -1, which is outputted by the program.
+El mayor entero en la lista `[-1, -3, -2]` es -1, que es lo que muestra el programa.
 
 ---

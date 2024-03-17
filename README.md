@@ -85,36 +85,35 @@ Cuando abras carpetas de desafíos con `VS Code`notarás que en esa área que se
 
 ### IMAGEN BASE PARA DOCKER ###
 
-Este paso, el último, es un poco incómodo en este momento. Hay que descargar una imagen docker, y decirle a docker que la cargue.
+Este paso, el último, es un poco incómodo en este momento. Hay que descargar una imagen docker algo grande.
 
-Si tienes buen acceso a internet y VPN, quizás baste con ejecutar esto desde dentro de la carpeta de un reto, y esperar a que se descargue y construya, lo que es un proceso realmente largo, aunque se haga una sola vez:
+Primero ejecuta esto para confirmar la versión que debes descargar:
 
-```
-acpp 
-```
-
-Si demora es que se estárá descargando la imagen (no puedes ver el progreso de la descarga) y pueden ser casi 1GB de datos.
-
-En otro caso **lo recomendable** es descargar la imagen base compactada, que es el archivo `acpp.local.tar.zip` y que puedes encontrar acá en [https://github.com/neuroactivos/acpp-workspace/releases/latest]
-
-Una vez descargada, descompacta la imagen, para obtener un archivo llamado `acpp.local.tar`.
-
-Ahora desde la línea de comandos ejecuta esto:
-
-- En windows, asumiendo que el archivo quedó descompactado en `D:\Downloads`:
-
-  ```	
-	docker -i D:\Downloads\acpp.local.tar
+  ```
+  acpp -version
   ```
 
-- En linux o macOS, asumiendo el archivo quedó descompactado en `~/Downloads`:
+Anota el identificador de la versión tal cual aparece en la salida del comando anterior, y ahora ejecuta este otro comando para descargar e importar la imagen a docker. Recuerda colocar el la versión en donde dice **VERSION**
+
+  ```	
+	docker pull ghcr.io/neuroactivos/acpp:VERSION
+  ```
+
+Ambos comandos se ejecutan desde una linea de comandos.
+
+Como alternativa, una vez sabes el identificador de versión, si tienes acceso a una imagen descargada previamente en una memoria, puedes hacer algo así:
+
+En windows, asumiendo que el identificador de versión es `v20240314`:
 
  ```
-	docker load < ~/Downloads/acpp.local.tar
+ docker -i F:\acpp.v20240314.tar
  ```
 
-El proceso puede demorar quizás un par de minutos según las características de tu PC
+En linux, o macOS, asumiendo el mismo identificador:
 
+ ```
+ docker load <acpp.v20240314.tar
+ ```
 
 ### VERIFICACIONES ###
 

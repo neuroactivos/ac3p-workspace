@@ -1,36 +1,33 @@
-# Challenge: Minimal Pair Sum for Non-Negatives #
 
-## Objective ##
+# Suma mínima para no negativos #
 
-Write a program that analyzes a list of integers, each one being a non-negative number, identifying the minimal sum achievable by adding any two different numbers from the list. Your program should output two pieces of information:
+## Objetivo ##
 
-The minimal sum itself.
+Escribe un programa que analice una lista de enteros, siendo cada uno un número no negativo, identificando la suma mínima alcanzable al sumar cualesquiera dos números distintos de la lista. Tu programa debe entregar dos números: la suma mínima en sí y el número de pares únicos dentro de la lista que suman este valor mínimo.
 
-The number of unique pairs within the list that sum up to this minimal value.
+### Formato de entrada ### 
 
-### Input Format ### 
+La entrada comienza con un entero `N`, indicando el número de enteros en la lista.
 
-The input begins with an integer N (2 ≤ N ≤ 10^5), indicating the number of integers in the list.
+Cada una de las siguientes `N` líneas contiene un entero distinto, representando un elemento de la lista. 
 
-Each of the next N lines contains a distinct integer, representing an element of the list. The value of each integer is within the range 0 to 10^6.
+### Formato de Salida ###
 
-### Output Format ###
+La primera línea de salida debe ser la suma mínima de cualesquiera dos enteros distintos de la lista de entrada.
 
-The first line of output should be the minimal sum of any two distinct integers from the input list.
+La segunda línea debe indicar el número de pares únicos que se pueden formar a partir de la lista que suman este valor mínimo.
 
-The second line should indicate the number of unique pairs that can be formed from the list which sum up to this minimal value.
+## Restricciones ##
 
-## Constraints ##
+- El número `N` cumple que `2 ≤ N ≤ 10^5`
+- El valor de cada entero `n` de la lista cumple `0 ≤ n ≤ 10^6`.
+- Los enteros en la lista no son necesariamente únicos.
+- Los pares se consideran iguales si contienen los mismos números, sin importar el orden de los mismos o sus posiciones en la lista. Es decir `(a, b)` es idéntico a cualquier otro `(a, b)` y, también, `(a, b)` se considera lo mismo que `(b, a)`.
 
-The integers in the list are not necessarily unique.
 
-The order of the numbers in a pair does not matter; pairs are considered the same if they contain the same numbers, regardless of order or positions in the list. For example, (a, b) is identical to any other (a, b) and, also, (a, b) is considered the same as (b, a).
+## Ejemplo 1 ## 
 
-The program must complete execution within 2 seconds for any given valid input case.
-
-## Example 1 ## 
-
-### Input ###
+### Entrada ###
 
 ```
 6
@@ -42,13 +39,15 @@ The program must complete execution within 2 seconds for any given valid input c
 63
 ```
 
-### Output ###
+### Salida ###
 
 ```
 4
 1
 ```
 
-__Explanation__
+__Explicación__
 
-The minimal sum that can be obtained by adding any two different numbers from the list is 4, thus the number in the output first line is 4. That minimal sum is achieved by adding 0 and 4 together. There is only a unique pair (0, 4) that sums up to 4, thus the output at the second line is 1.
+La suma mínima que se puede obtener sumando cualesquiera dos números diferentes de la lista es 4, por lo tanto, el número en la primera línea de salida es 4. Esa suma mínima se logra sumando 0 y 4. Solo hay un par único `(0, 4)` que suma hasta 4, por lo tanto, la salida en la segunda línea es 1.
+
+---

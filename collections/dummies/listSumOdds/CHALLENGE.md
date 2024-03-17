@@ -1,28 +1,29 @@
 
-# Challenge: Sum All List Odd Numbers #
+# Sumar todos los números impares de una lista #
 
-## Objective ##
+## Objetivo ##
 
-Write a program that reads a list of integers and outputs the sum of all the odd numbers in the list.
+Escribe un programa que lea una lista de enteros y muestre la suma de todos los números impares de la lista.
 
-### Input Format ###
+### Formato de entrada ###
 
-The first line of input contains a single integer, `N`, representing the number of integers in the list, where `1 ≤ N ≤ 10^5`.
+La primera línea de entrada contiene un solo entero, `N`, que representa el número de enteros en la lista, donde `1 ≤ N ≤ 10^9`.
 
-Each of the next `N` lines contains a single integer, representing the elements of the list.
+Cada una de las siguientes `N` líneas contiene un solo entero, representando cada elemento de la lista.
 
-### Output Format ###
+### Formato de salida ###
 
-The program should output a single integer, representing the sum of all the odd numbers found in the list.
+El programa debe mostrar un solo entero, que representa la suma de todos los números impares que hay en la lista.
 
-### Constraints ###
+### Restricciones ###
 
-- The integers in the list can be negative, positive, or zero.
-- Each integer in the list will fit within the standard 32-bit signed integer range.
+- Los enteros de la lista pueden ser negativos, positivos o cero.
+- Para cada entero `x` en la lista se cumple que su valor absoluto es menor o igual que `10^9`
+- Para determinar la paridad o no de un número tenga en cuenta su valor absoluto. `-3` se considera impar, al igual que `3`
 
-## Example 1 ##
+## Ejemplo 1 ##
 
-### Input ###
+### Entrada ###
 
 ```
 5
@@ -33,19 +34,19 @@ The program should output a single integer, representing the sum of all the odd 
 5
 ```
 
-### Output ###
+### Salida ###
 
 ```
 9
 ```
 
-__Explanation__
+__Explicación__
 
-The sum of the odd numbers in the list `[1, 2, 3, 4, 5]` is 9 (`1 + 3 + 5`), which is outputted by the program.
+La suma de los números impares en la lista `[1, 2, 3, 4, 5]` es 9 (`1 + 3 + 5`), que es lo que muestra el programa.
 
-## Example 2 ##
+## Ejemplo 2 ##
 
-### Input ###
+### Entrada ###
 
 ```
 4
@@ -55,14 +56,14 @@ The sum of the odd numbers in the list `[1, 2, 3, 4, 5]` is 9 (`1 + 3 + 5`), whi
 8
 ```
 
-### Output ###
+### Salida ###
 
 ```
 4
 ```
 
-__Explanation__
+__Explicación__
 
-The sum of the odd numbers in the list `[-3, -2, 7, 8]` is 4 (`-3 + 7`), which is outputted by the program.
+La suma de los números impares en la lista `[-3, -2, 7, 8]` es 4 (`-3 + 7`), que es lo que muestra el programa.
 
 ---

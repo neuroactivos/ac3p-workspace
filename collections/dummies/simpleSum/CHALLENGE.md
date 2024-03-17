@@ -1,62 +1,61 @@
-# Challenge: Simple Sum #
 
-## Objective ##
+# Suma simple de dos números #
 
-Write a program that receives two integers (which may be positive, negative, or zero) and calculates the sum of these two integers. The program should output this sum as a single integer.
+## Objetivo ##
 
-### Input Format ###
+Escribe un programa que reciba dos enteros (que pueden ser positivos, negativos o cero) y calcule la suma de estos dos enteros. El programa debe entregar esta suma como un entero.
 
-The program should accept two lines of input:
+### Formato de Entrada ###
 
-- The first line will contain the first integer, `A`, where `-10^6 ≤ A ≤ 10^6`.
-- The second line will contain the second integer, `B`, where `-10^6 ≤ B ≤ 10^6`.
+El programa debe aceptar dos líneas de entrada:
 
-### Output Format ###
+- La primera línea contendrá el primer entero, `A`, donde `-10^6 ≤ A ≤ 10^6`.
+- La segunda línea contendrá el segundo entero, `B`, donde `-10^6 ≤ B ≤ 10^6`.
 
-The program should output a single integer, representing the sum of `A` and `B`.
+### Formato de Salida ###
 
-### Constraints ###
+El programa debe enviar a la salida únicamente un entero, representando la suma de `A` y `B`.
 
-- The input integers can be negative, positive, or zero.
-- The sum must fit within the standard 32-bit signed integer range.
+### Restricciones ###
 
-## Example 1 ##
+- Los enteros de entrada pueden ser negativos, positivos o cero.
 
-### Input ###
+## Ejemplo 1 ##
+
+### Entrada ###
 
 ```
 5
 3
 ```
 
-### Output ###
+### Salida ###
 
 ```
 8
 ```
 
-__Explanation__
+__Explicación__
 
-The sum of 5 and 3 is 8, which is outputted by the program.
+La suma de 5 y 3 es 8, que es mostrado por el programa.
 
-## Example 2 ##
+## Ejemplo 2 ##
 
-### Input ###
+### Entrada ###
 
 ```
 -3
 6
 ```
 
-### Output ###
+### Salida ###
 
 ```
 3
 ```
 
-__Explanation__
+__Explicación__
 
-The sum of -3 and 6 is 3, which is outputted by the program.
+La suma de -3 y 6 es 3, que es mostrado por el programa.
 
-
-
+---
