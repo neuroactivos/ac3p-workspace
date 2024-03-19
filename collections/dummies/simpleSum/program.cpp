@@ -1,17 +1,16 @@
-#include <iostream>
+#include <iostream> // para incluir las librerías de entrada y salida
 
-int main() {
+int main() { // función principal, punto de entrada al programa
 
-    int A, B;
+    int A, B; // declaramos dos variables enteras
+    
+    std::cin >> A >> B; // leemos dos enteros desde la entrada estándar
 
-    // Read two integers from stdin and store on A and B
-    std::cin >> A >> B;
+    int sum = A + B; // declaramos una variable entera y le asignamos la suma de A y B
 
-    // Calculate the sum of the two integers
-    int sum = A + B;
+    std::cout << sum << "\n"; // escribimos la suma en la salida estándar, seguido de un salto de línea
 
-    // Write the sum to stdout
-    std::cout << sum << "\n";
+    return 0; // terminamos el programa con un código de salida 0, para indicar que terminó correctamente
 
-    return 0;
-}
+} // fin de la función principal
+

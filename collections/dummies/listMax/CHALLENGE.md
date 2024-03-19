@@ -1,5 +1,5 @@
 
-# Desafío: Máximo de una Lista #
+# Máximo de una lista #
 
 ## Objetivo ##
 
