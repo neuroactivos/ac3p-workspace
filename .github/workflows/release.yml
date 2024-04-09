@@ -3,11 +3,11 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      acpp_tag:
-        description: 'The acpp tag of the release with the assets to include'
+      ac3p_tag:
+        description: 'The ac3p tag of the release with the assets to include'
         required: true
-      acpp_workspace_tag:
-        description: 'The acpp-workspace release tag to set'
+      ac3p_workspace_tag:
+        description: 'The ac3p-workspace release tag to set'
         required: true
 
 jobs:
@@ -18,28 +18,28 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ github.event.inputs.acpp_workspace_tag }}
-          release_name: Release ${{ github.event.inputs.acpp_workspace_tag }}
-          body: "Generated release using tag ${{ github.event.inputs.acpp_workspace_tag }}"
+          tag_name: ${{ github.event.inputs.ac3p_workspace_tag }}
+          release_name: Release ${{ github.event.inputs.ac3p_workspace_tag }}
+          body: "Generated release using tag ${{ github.event.inputs.ac3p_workspace_tag }}"
           draft: true
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
 
-      - name: Download assets from private acpp repository release by tag
+      - name: Download assets from private ac3p repository release by tag
         if: steps.create_release.outcome == 'success'
         env:
           ACCESS_TOKEN: ${{ secrets.GH_SECRET }}
-          RELEASE_TAG: ${{ github.event.inputs.acpp_tag }}
+          RELEASE_TAG: ${{ github.event.inputs.ac3p_tag }}
         run: |
-          for asset_name in "acpp.linux.x86_64.bin" "acpp.darwin.x86_64.bin" "acpp.windows.x86_64.exe" "acpp.windows.installer.x86_64.exe" "acpp.vsix"
+          for asset_name in "ac3p.linux.x86_64.bin" "ac3p.darwin.x86_64.bin" "ac3p.windows.x86_64.exe" "ac3p.windows.installer.x86_64.exe" "ac3p.vsix"
           do
             echo "Downloading $asset_name from release $RELEASE_TAG"
             
             ASSET_URL=$(curl -s \
               -H "Authorization: token $ACCESS_TOKEN" \
               -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/neuroactivos/acpp/releases/tags/$RELEASE_TAG" | jq -r --arg asset_name "$asset_name" '.assets[] | select(.name == $asset_name).url')
+              "https://api.github.com/repos/neuroactivos/ac3p/releases/tags/$RELEASE_TAG" | jq -r --arg asset_name "$asset_name" '.assets[] | select(.name == $asset_name).url')
       
             curl -L -o "$asset_name" \
               -H "Accept: application/octet-stream" \
@@ -52,8 +52,8 @@ jobs:
         if: steps.create_release.outcome == 'success'
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: acpp.linux.x86_64.bin
-          asset_name: acpp.linux.x86_64.bin
+          asset_path: ac3p.linux.x86_64.bin
+          asset_name: ac3p.linux.x86_64.bin
           asset_content_type: application/octet-stream              
         env:
           GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
@@ -63,8 +63,8 @@ jobs:
         if: steps.create_release.outcome == 'success'
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: acpp.darwin.x86_64.bin
-          asset_name: acpp.darwin.x86_64.bin
+          asset_path: ac3p.darwin.x86_64.bin
+          asset_name: ac3p.darwin.x86_64.bin
           asset_content_type: application/octet-stream              
         env:
           GITHUB_TOKEN: ${{ secrets.GH_SECRET }}              
@@ -74,8 +74,8 @@ jobs:
         if: steps.create_release.outcome == 'success'
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: acpp.windows.x86_64.exe
-          asset_name: acpp.windows.x86_64.exe
+          asset_path: ac3p.windows.x86_64.exe
+          asset_name: ac3p.windows.x86_64.exe
           asset_content_type: application/octet-stream              
         env:
           GITHUB_TOKEN: ${{ secrets.GH_SECRET }}
@@ -85,8 +85,8 @@ jobs:
         if: steps.create_release.outcome == 'success'
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: acpp.windows.installer.x86_64.exe
-          asset_name: acpp.windows.installer.x86_64.exe
+          asset_path: ac3p.windows.installer.x86_64.exe
+          asset_name: ac3p.windows.installer.x86_64.exe
           asset_content_type: application/octet-stream              
         env:
           GITHUB_TOKEN: ${{ secrets.GH_SECRET }}          
@@ -96,8 +96,8 @@ jobs:
         if: steps.create_release.outcome == 'success'
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: acpp.vsix
-          asset_name: acpp.vsix
+          asset_path: ac3p.vsix
+          asset_name: ac3p.vsix
           asset_content_type: application/octet-stream              
         env:
           GITHUB_TOKEN: ${{ secrets.GH_SECRET }}          
